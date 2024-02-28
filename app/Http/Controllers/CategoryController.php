@@ -8,48 +8,54 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class CategoryController extends Controller
 {
-    public function category() {
+    public function category()
+    {
         return view('category.category', [
             'categories'    =>  Category::orderBy('id')
-                                        ->filter(request(['search']))
-                                        ->withCount('products')
-                                        ->get(),
+                ->filter(request(['search']))
+                ->withCount('products')
+                ->get(),
         ]);
     }
 
-    public function categoryCreate() {
+    public function categoryCreate()
+    {
         return view('category.category-createform');
     }
 
-    public function categoryStore() {
+    public function categoryStore()
+    {
         $formData = request()->validate([
-            'name'  => 'required | unique:Categories,name',
-            'slug'  => 'required | unique:Categories,slug'
+            'name'  => 'required | unique:categories,name',
+            'slug'  => 'required | unique:categories,slug'
         ]);
 
         Category::create($formData);
         return redirect('/admin/categories')->with('success', 'Category Created Successfully');
     }
 
-    public function categoryEdit(Category $category) {
+    public function categoryEdit(Category $category)
+    {
         return view('category.category-editform', [
             'category'  => $category
         ]);
     }
 
-    public function categoryUpdate(Category $category) {
-            $formData = request()->validate([
-                'name' => 'required | unique:categories,name,' . $category->id,
-                'slug' => 'required | unique:categories,slug,' . $category->id
-            ]);
+    public function categoryUpdate(Category $category)
+    {
+        $formData = request()->validate([
+            'name' => 'required | unique:categories,name,' . $category->id,
+            'slug' => 'required | unique:categories,slug,' . $category->id
+        ]);
 
         $category->update($formData);
 
         return redirect('/admin/categories')->with('success', 'Category Updated Successfully');
     }
 
-    public function categoryDestory(Category $category) {
-        $category -> delete();
+    public function categoryDestory(Category $category)
+    {
+        $category->delete();
 
         return back()->with('success', 'Category Deleted Successfully');
     }

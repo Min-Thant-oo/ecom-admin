@@ -16,11 +16,6 @@ class ContactUsController extends Controller
         ]);
     }
 
-    // public function contactMessagesDestroy(ContactUs $contactus){
-    //     $contactus->delete();
-    //     return back()->with('success', 'Contact Message Deleted Successfully');
-    // }
-
     public function contactMessagesDestroy($id)
     {
         $contactMessage = ContactUs::findOrFail($id);

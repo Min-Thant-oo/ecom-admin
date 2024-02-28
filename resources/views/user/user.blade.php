@@ -46,7 +46,8 @@
                                         <td>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#userModal{{ $user->id }}">
                                                 <img 
-                                                    src="{{ asset($user->image ? "/storage/$user->image" : 'https://source.unsplash.com/random/?' . $user->id) }}"
+                                                    {{-- src="{{ asset($user->image ? "/storage/$user->image" : 'https://source.unsplash.com/random/?' . $user->id) }}" --}}
+                                                    src="{{ asset($user->image ? "https://solarecombackend.minthantoo.com/storage/$user->image" : 'https://source.unsplash.com/random/?' . $user->id) }}"
                                                     alt=""
                                                 >           
                                             </a>   
@@ -67,7 +68,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <img 
-                                                            src="{{ asset($user->image ? "/storage/$user->image" : 'https://source.unsplash.com/random/?' . $user->id) }}"
+                                                            src="{{ asset($user->image ? "https://solarecombackend.minthantoo.com/storage/$user->image" : 'https://source.unsplash.com/random/?' . $user->id) }}"
                                                             class="img-fluid" 
                                                             alt="{{ $user->name }}"
                                                         >

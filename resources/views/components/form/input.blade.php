@@ -15,6 +15,7 @@
         class="form-control rounded-md {{$class}}" 
         id="{{$name}}" 
         placeholder="Please Enter {{ucwords($name)}}"
+        step="0.01" 
     >
     <x-error :name='$name' />
 </div>
