@@ -2,58 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Services\Category\CategoryStoreService;
+use App\Services\Category\CategoryUpdateService;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 
 class CategoryController extends Controller
 {
-    public function category()
+    public function index()
     {
-        return view('category.category', [
-            'categories'    =>  Category::orderBy('id')
+        return view('category.index', [
+            'categories'    =>  Category::latest()
                 ->filter(request(['search']))
-                ->withCount('products')
-                ->get(),
+                // ->get(),
+                ->paginate(10)
+                ->withQueryString(),
         ]);
     }
 
-    public function categoryCreate()
+    public function create()
     {
-        return view('category.category-createform');
+        return view('category.create');
     }
 
-    public function categoryStore()
+    public function store(CategoryRequest $request, CategoryStoreService $categoryStoreService)
     {
-        $formData = request()->validate([
-            'name'  => 'required | unique:categories,name',
-            'slug'  => 'required | unique:categories,slug'
-        ]);
-
-        Category::create($formData);
-        return redirect('/admin/categories')->with('success', 'Category Created Successfully');
+        $categoryStoreService($request->validated());
+        return to_route('categories.index')->with('success', 'Category Created Successfully');
     }
 
-    public function categoryEdit(Category $category)
+    public function edit(Category $category)
     {
-        return view('category.category-editform', [
+        return view('category.edit', [
             'category'  => $category
         ]);
     }
 
-    public function categoryUpdate(Category $category)
+    public function update(Category $category, CategoryRequest $request, CategoryUpdateService $categoryUpdateService)
     {
-        $formData = request()->validate([
-            'name' => 'required | unique:categories,name,' . $category->id,
-            'slug' => 'required | unique:categories,slug,' . $category->id
-        ]);
-
-        $category->update($formData);
-
-        return redirect('/admin/categories')->with('success', 'Category Updated Successfully');
+        $categoryUpdateService($request->validated(), $category);
+        return to_route('categories.index')->with('success', 'Category Updated Successfully');
     }
 
-    public function categoryDestory(Category $category)
+    public function destory(Category $category)
     {
         $category->delete();
 

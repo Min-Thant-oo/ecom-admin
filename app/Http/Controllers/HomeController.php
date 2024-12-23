@@ -7,13 +7,10 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Str;
-use Termwind\Components\Dd;
-use Illuminate\Http\Request;
-use Illuminate\Support\Number;
 
 class HomeController extends Controller
 {
-    public function home(Product $product, User $user) {
+    public function index(Product $product, User $user) {
         $totalSale = Order::sum('total_amount');
         $formattedTotalSale = number_format($totalSale, 2, '.', ',');
 
@@ -37,13 +34,15 @@ class HomeController extends Controller
             'data' =>  $topFiveSpendingUsers->pluck('orders_sum_total_amount')->toArray(),
         ];
 
-        return view('home.home', [
-            'products'  => Product::latest()->get(),
-            'users'     => User::latest()->get(),
-            'orders'    => Order::latest()->get(),
-            'totalSale' => $formattedTotalSale, 
-            'data'      => $data,
-            'bar'      => $bar,
+        return view('home.index', [
+            'products'              => Product::with('category')->latest()->take(7)->get(),
+            'productCount'          => Product::count(),
+            'userCount'             => User::count(),
+            'orders'                => Order::with('user', 'products')->latest()->take(5)->get(),
+            'orderCount'            => Order::count(),
+            'totalSale'             => $formattedTotalSale, 
+            'data'                  => $data,
+            'bar'                   => $bar,
             'topFiveSpendingUsers'  => $topFiveSpendingUsers
         ]);
     }

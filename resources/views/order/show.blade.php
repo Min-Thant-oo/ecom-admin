@@ -84,13 +84,13 @@
                         <th style="padding: 1rem 0.75rem; text-align: right; font-size: 1rem; font-weight: 400; color: #718096;">Subtotal</th>
                         <td></td>
                         <td></td>
-                        <td style="padding: 1rem 1rem; text-align: right; font-size: 1rem; color: #718096;">${{ $receipt->total_amount }}</td>
+                        <td style="padding: 1rem 1rem; text-align: right; font-size: 1rem; color: #718096;">$ {{ $receipt->total_amount }}</td>
                     </tr>
                     <tr>
                         <th style="padding: 1rem 0.75rem; text-align: right; font-size: 1rem; font-weight: 400; color: #718096;">Tax</th>
                         <td></td>
                         <td></td>
-                        <td style="padding: 1rem 1rem; text-align: right; font-size: 1rem; color: #718096;">$00.00</td>
+                        <td style="padding: 1rem 1rem; text-align: right; font-size: 1rem; color: #718096;">$ 00.00</td>
                     </tr>
                     <tr>
                         <th style="padding: 1rem 0.75rem; text-align: right; font-size: 1rem; font-weight: 400; color: #718096;">Discount</th>
@@ -102,7 +102,7 @@
                         <th style="padding: 1rem 0.75rem; text-align: right; font-size: 1rem; font-weight: 600; color: #2d3748;">Total</th>
                         <td></td>
                         <td></td>
-                        <td style="padding: 1rem 1rem; text-align: right; font-size: 1rem; font-weight: 600; color: #2d3748;">${{ $receipt->total_amount }}</td>
+                        <td style="padding: 1rem 1rem; text-align: right; font-size: 1rem; font-weight: 600; color: #2d3748;">$ {{ $receipt->total_amount }}</td>
                     </tr>
                 </tfoot>
                 

@@ -1,4 +1,4 @@
-@props(['categories'])
+@props(['orders'])
 
 
 <x-layout>
@@ -8,19 +8,17 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <x-flashnoti :success="session('success')" />
-                        <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-0 justify-content-between mb-4">
-                            <h1 class="" style="font-size:x-large; font-weight: bold">Categories</h1>
-                            <a href="/admin/categories/create" class="btn btn-primary text-white">Create New Item</a>
+                        <div class="d-flex mb-4">
+                            <h1 class="t" style="font-size:x-large; font-weight: bold">Purchased Orders</h1>
                         </div>
 
-                        <form action="/admin/categories" class="d-flex flex-column flex-sm-row gap-3 mb-3" method="GET">
-                            <div class="d-flex flex-column gap-2 flex-grow-1">
+                        <form action="/orders" class="d-flex flex-column flex-sm-row gap-3 mb-3" method="GET">
+                            <div class="d-flex flex-column flex-grow-1 gap-2">
                                 <label for="search" class="">Search</label>
                                 <input type="text" id="search" name="search" value="{{request('search')}}" class="form-control p-2 rounded" placeholder="Please enter to search">
                             </div>
 
-                            <div class="d-flex flex-column justify-content-center">
+                            <div class=" d-flex flex-column">
                                 <button type="submit" class="btn btn-primary mt-1 mt-sm-3 text-white">Filter</button>
                             </div>
 
@@ -30,39 +28,41 @@
                         <div class="table-responsive">
 
                             
-                        <table class="table table-striped">
+                        <table class="table table-striped mb-1">
                             <thead>
                                 <tr>
                                     <th scope="">#</th>
                                     <th>Name</th>
-                                    <th>Slug</th>
+                                    <th style="width: 150px;" scope="col">Email</th>
+                                    <th >Amount</th>
+                                    <th># of Products</th>
+                                    <th>Total quantity</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($categories->reverse() as $index => $category)
+                                @forelse ($orders as $index => $order)
                                     <tr>
                                         <th style="width: 20px;">{{ $index + 1 }}</th>
-                                        <td>{{$category->name}}</td>
-                                        <td>{{$category->slug}}</td>
+                                        <td style="width: 200px;">{{\Illuminate\Support\Str::limit($order->user->name, 20)}}</td>
+                                        <td><a href="mailto:{{$order->user->email}}">{{$order->user->email}}</a></td>
+                                        <td>${{number_format($order->total_amount, 2, '.', ',')}}</td>
+                                        <td>{{$order->products->count()}}</td>
+                                        <td>{{$order->quantity}}</td>
                                         <td class="d-flex gap-2">
-                                            <a href="/admin/categories/{{$category->id}}/edit" class="btn btn-primary text-white">Edit</a>
-                                            <form action="/admin/categories/{{$category->id}}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger bg-danger text-white">Delete</button>
-                                            </form>
+                                            <a href="{{ route('orders.show', $order->id) }}" target="_blank" class="btn btn-primary text-white">View Receipt</a>
                                         </td>
                                     </tr>
                                     @empty
                                         <tr>
                                             <td colspan="7" class="border border-white ">
-                                                <h1 class="text-center text-xs" style="font-size:x-large; font-weight: bold">No Categories Found</h1>
+                                                <h1 class="text-center text-xs" style="font-size:x-large; font-weight: bold">No Orders Found</h1>
                                             </td>
                                         </tr>
                                 @endforelse
                             </tbody>
                         </table>
+                        {{ $orders->links() }}
                         </div>
                     </div>
                 </div>

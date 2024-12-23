@@ -2,82 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\Product\ProductStoreService;
+use App\Services\Product\ProductUpdateService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    public function products() {
-        return view('product.product', [
-            'products' => Product::filter(request(['search', 'category']))
-                                    ->get(),
+    public function index() 
+    {
+        return view('product.index', [
+            'products' => Product::with('category')
+                    ->withCount('users')
+                    ->filter(request(['search', 'category']))
+                    ->latest()
+                    // ->get(),
+                    ->paginate(10)
+                    ->withQueryString(),
             'categories' => Category::all(),
         ]);
     }
 
-    public function productCreate() {
-        return view('product.product-createform', [
+    public function create() 
+    {
+        return view('product.create', [
             'categories' => Category::orderby('id')->get(),
         ]);
     }
 
-    public function productStore() {
-        // try {
-            $formData = request()->validate([
-                'title' => 'required',
-                'description'  => 'required',
-                'category_id' => 'required | exists:categories,id',
-                'price' => 'required | numeric',
-                'image' => 'required | image ',
-            ]);
-        // } 
-        //     catch (ValidationException $e) {
-        //     return $e->validator->errors();
-        // }
-    
-
-        $formData['image'] = request()->file('image')->store('images');
-
-        Product::create($formData);
-
-        return redirect('/admin/products')->with('success', 'Product Created Successfully');
+    public function store(ProductRequest $request, ProductStoreService $productStoreService) 
+    {
+        $productStoreService($request->validated());
+        return to_route('products.index')->with('success', 'Product Created Successfully');
     }
 
-    public function productEdit(Product $product) {
-        return view('product.product-editform', [
+    public function edit(Product $product) {
+        return view('product.edit', [
             'product' => $product,
             'categories' => Category::orderby('id')->get(),
         ]);
     }
 
-    public function productUpdate(Product $product) {
-        // try {
-            $formData = request()->validate([
-                'title'       => 'required',
-                'description' => 'required',
-                'category_id' => 'required|exists:categories,id',
-                'price' => 'required | numeric',
-                'image' => ' image | mimes:jpeg,png,jpg,gif,svg | max:2048',
-            ]);
-        // } catch (\Throwable $e) {
-        //     return $e->validator->errors();
-        // }
-        
-
-        // $formData['user_id'] = auth()->id();
-        $formData['image'] = request()->file('image') ? request()->file('image')->store('images') : $product->image;
-
-        $product->update($formData);
-
-        return redirect('/admin/products')->with('success', 'Product Successfully Updated');
-        
+    public function update(Product $product, ProductRequest $request, ProductUpdateService $productUpdateService) 
+    {
+        $productUpdateService($request->validated(), $product);
+        return to_route('products.index')->with('success', 'Product Successfully Updated');
     }
 
-    public function productDestroy(Product $product) {
+    public function destroy(Product $product) 
+    {
         $product->delete();
-
         return back()->with('success', 'Product Successfully Deleted');
     }
 }

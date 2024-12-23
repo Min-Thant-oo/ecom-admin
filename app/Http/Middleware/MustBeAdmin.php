@@ -21,7 +21,7 @@ class MustBeAdmin
             // Log the user out
             Auth::logout();
 
-            return redirect('/admin/login')->with('success', 'You are not authorized to access this resource.');
+            return redirect('/login')->with('success', 'You are not authorized to access this resource.');
         }
         return $next($request);
     }

@@ -1,4 +1,4 @@
-@props(['products', 'orders', 'users', 'totalSale', 'categories', 'data', 'bar'])
+@props(['products', 'productCount', 'orders', 'orderCount', 'userCount', 'totalSale', 'categories', 'data', 'bar'])
 <x-layout>
     <div class="main-panel">
         <div class="content-wrapper">
@@ -22,7 +22,7 @@
                         <div class="card-body">
                         <p class="card-title text-xl-left">Users</p>
                         <div class="d-flex flex-wrap justify-content-between  justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{$users->count()}}</h3>
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{$userCount}}</h3>
                             <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>  
                         </div>
@@ -34,7 +34,7 @@
                         <div class="card-body">
                         <p class="card-title text-xl-left"># of Products</p>
                         <div class="d-flex flex-wrap justify-content-between  justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{$products->count()}}</h3>
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{$productCount}}</h3>
                             <i class="ti-gift icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>  
                         </div>
@@ -46,7 +46,7 @@
                         <div class="card-body">
                         <p class="card-title text-xl-left">Orders</p>
                         <div class="d-flex flex-wrap justify-content-between  justify-content-xl-between align-items-center">
-                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{$orders->count()}}</h3>
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{$orderCount}}</h3>
                             <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                         </div>  
                         </div>
@@ -66,7 +66,7 @@
                 <div class="col-lg-6 grid-margin  stretch-card">
                     <div class="card">
                       <div class="card-body">
-                        <h4 class="card-title mb-5">Category Chart</h4>
+                        <h4 class="card-title mb-5">Category Chart with number of products</h4>
                         <canvas class="mt-2" id="pieChart"></canvas>
                       </div>
                     </div>
@@ -81,7 +81,7 @@
                             <p class="mb-4 card-title">Recently Added Products</p>
 
                             <div class="p-2" >
-                                @foreach ($products->take(7) as $product)
+                                @foreach ($products as $product)
                                         <div 
                                             {{-- class="d-flex flex-column flex-lg-row p-2 mb-5"  --}}
                                             class="row ps-3 pt-3 pb-2 mb-4 gap-" 
@@ -89,7 +89,8 @@
                                         >
                                             {{-- <div class="col-sm-12 col-md-2 pe-md-5"> --}}
                                                 <img 
-                                                    src='{{ asset($product->image ? "/storage/$product->image" : 'https://source.unsplash.com/random/?' . $product->id) }}' 
+                                                    src='{{ asset($product->image ? "/storage/$product->image" : "https://picsum.photos/1000/680?random=" . $product->id) }}' 
+                                                    {{-- src='{{ asset($product->image ? "/storage/$product->image" : 'https://source.unsplash.com/random/?' . $product->id) }}'  --}}
                                                     alt="" 
                                                     style="width: 150px; height: 90px; object-fit: cover"
                                                 >
@@ -114,7 +115,7 @@
                       <div class="card-body">
                         <p class="mb-4 card-title">Recent Purchased Orders</p>
             
-                        @foreach ($orders->take(5) as $order)
+                        @foreach ($orders as $order)
                             <div class=" p-4 pb-2 mb-4 pt- border rounded cursor-pointer">
                               <div class="col-md-12">
                                   <h4 class="card-title text-primary mb-2">Transactions ID - {{$order->transaction_id}}</h4>

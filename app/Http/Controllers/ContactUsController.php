@@ -3,23 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactUs;
-use Illuminate\Http\Request;
 
 class ContactUsController extends Controller
 {
-    public function contactMessages()
+    public function index()
     {
-        return view('contactus.contactus', [
-            'contactmessages' => ContactUs::orderBy('id')
+        return view('contactus.index', [
+            'contactmessages' => ContactUs::latest()
                 ->filter(request(['search']))
-                ->get(),
+                // ->get(),
+                ->paginate(10)
+                ->withQueryString(),
         ]);
     }
 
-    public function contactMessagesDestroy($id)
+    public function destroy(ContactUs $contactmessage)
     {
-        $contactMessage = ContactUs::findOrFail($id);
-        $contactMessage->delete();
+        $contactmessage->delete();
         return back()->with('success', 'Contact Message Deleted Successfully');
     }
 }

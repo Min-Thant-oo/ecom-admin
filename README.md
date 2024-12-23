@@ -3,7 +3,7 @@
 Admin dashboard is a site where admin can create, update and delete the products, categories and admin info. 
 Admin can monitor user lists and purchased order as well.
 
-You can check out live demo from [here](https://www.adminsolarecom.minthantoo.com/admin/login)
+You can check out live demo from [here](https://www.adminsolarecom.minthantoo.com/login)
 
 ## **Requirements**
 

@@ -7,11 +7,14 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function user() {
-        return view('user.user', [
-            'users' => User::filter(request(['search']))->get(),
-            // 'users' => User::withCount('orders')->orderByDesc('orders_count')->filter(request(['search']))->get(),
-
+    public function index() {
+        return view('user.index', [
+            'users' => User::with('orders')
+                ->filter(request(['search']))
+                ->latest()
+                // ->get(),
+                ->paginate(10)
+                ->withQueryString(),
         ]);
     }
 }

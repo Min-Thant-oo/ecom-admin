@@ -9,7 +9,7 @@
                     <div class="card">
                     <div class="card-body">
                         <h1 class="card-title" style="font-size:x-large; font-weight: bold">Edit Product</h1>
-                        <form class="forms-sample" method="POST" action="/admin/products/{{$product->id}}/update" enctype="multipart/form-data">
+                        <form class="forms-sample" method="POST" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('patch')
 
@@ -43,7 +43,7 @@
                             >
                             
                             <button type="Submit" class="btn btn-primary me-2">Submit</button>
-                            <a href="/admin/products" class="btn btn-light">Cancel</a>
+                            <a href="{{ route('products.index') }}" class="btn btn-light">Cancel</a>
                         </form>
                     </div>
                     </div>

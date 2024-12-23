@@ -9,7 +9,7 @@
                     <div class="card">
                     <div class="card-body">
                         <h1 class="card-title" style="font-size:x-large; font-weight: bold">Create Product</h1>
-                        <form class="forms-sample" method="POST" action="/admin/products/store" enctype="multipart/form-data">
+                        <form class="forms-sample" method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                             @csrf
                             @method('post')
 
@@ -30,7 +30,7 @@
                             <x-form.input name="image" type="file"/>
                             
                             <button type="submit" class="btn btn-primary me-2">Submit</button>
-                            <a href="/admin/products" class="btn btn-light">Cancel</a>
+                            <a href="{{ route('products.index') }}" class="btn btn-light">Cancel</a>
                         </form>
                     </div>
                     </div>
@@ -40,43 +40,3 @@
     </div>
 </div>
 </x-layout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

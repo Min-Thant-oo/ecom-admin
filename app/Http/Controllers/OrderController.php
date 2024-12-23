@@ -6,18 +6,22 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
-    public function order() {
-        return view('order.order', [
-            'orders' => Order::filter(request(['search']))
-                                ->get(),
+    public function index() 
+    {
+        return view('order.index', [
+            'orders' => Order::with('user', 'products')
+                    ->latest()
+                    ->filter(request(['search']))
+                    // ->get(),
+                    ->paginate(10)
+                    ->withQueryString(),
         ]);
     }
 
-    public function viewReceipt($id) {
-        return view('order.order-view-receipt', [
-            'receipt'   =>  Order::find($id),
+    public function show(Order $order) 
+    {
+        return view('order.show', [
+            'receipt'   =>  $order,
         ]);
     }
-
-    
 }

@@ -8,7 +8,7 @@
                         <div class="card">
                         <div class="card-body">
                             <h1 class="card-title" style="font-size:x-large; font-weight: bold">Create Category</h1>
-                            <form class="forms-sample" method="POST" action="/admin/categories/store">
+                            <form class="forms-sample" method="POST" action="{{ route('categories.store') }}">
                                 @csrf
                                 @method('post')
 
@@ -16,7 +16,7 @@
                                 <x-form.input name="slug" />
 
                                 <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                <a href="/admin/categories" class="btn btn-light">Cancel</a>
+                                <a href="{{ route('categories.index') }}" class="btn btn-light">Cancel</a>
                             </form>
                         </div>
                         </div>

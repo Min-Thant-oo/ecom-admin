@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\loginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -12,18 +13,12 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function post_login() {
-        $formData = request()->validate([
-            'email'    => 'required|exists:users,email',
-            'password' => 'required',
-            // 'usertype' => '1'
-        ]);
-
-
-        if (auth()->attempt($formData) && auth()->user()->usertype !== 1) {
-            return redirect('/admin/login')->with('success', 'Wrong Cred');
+    public function post_login(loginRequest $request) 
+    {
+        if (auth()->attempt($request->validated()) && auth()->user()->usertype !== 1) {
+            return to_route('login')->with('success', 'Wrong Credentials!');
         } else {
-            return redirect('/admin/home')->with('success', 'Welcome back');
+            return to_route('home.index')->with('success', 'Welcome back');
         }
     }
         
@@ -31,6 +26,6 @@ class AuthController extends Controller
     public function logout() {
         auth()->logout();
 
-        return redirect('/admin/login')->with('success', 'Logout Successfully');
+        return to_route('login')->with('success', 'Logout Successfully');
     }
 }

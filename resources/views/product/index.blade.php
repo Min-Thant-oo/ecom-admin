@@ -11,10 +11,10 @@
                         <x-flashnoti :success="session('success')" />
                         <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-0 justify-content-between mb-4">
                             <h1 class="mt-2" style="font-size:x-large; font-weight: bold">Products</h1>
-                            <a href="/admin/products/create" class="btn btn-primary text-white">Create New Item</a>
+                            <a href="{{ route('products.create')}}" class="btn btn-primary text-white">Create New Item</a>
                         </div>
 
-                        <form action="/admin/products" class="d-flex flex-column flex-sm-row gap-3 col-md- mb-3" method="GET">
+                        <form action="/products" class="d-flex flex-column flex-sm-row gap-3 col-md- mb-3" method="GET">
                             <div class="d-flex flex-column flex-grow-1 gap-2 col-md- ">
                                 <label for="search">Search</label>
                                 <input type="text" id="search" name="search" value="{{request('search')}}" class="form-control p-2 rounded" placeholder="Please enter to search">
@@ -40,7 +40,7 @@
                         <div class="table-responsive">
 
                             
-                        <table class="table table-striped">
+                        <table class="table table-striped mb-1">
                             <thead>
                                 <tr>
                                     <th scope="">#</th>
@@ -54,40 +54,43 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($products->reverse() as $index => $product)
+                                @forelse ($products as $index => $product)
                                     <tr>
                                         <th style="width: 20px;">{{ $index + 1 }}</th>
                                         <td style="width: px;">{{\Illuminate\Support\Str::limit($product->title, 10)}}</td>
                                         <td class="py-1">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#productModal{{ $product->id }}">
                                                 <img 
-                                                    {{-- src='{{ asset($product->image ? "/storage/$product->image" : `https://source.unsplash.com/random/?${$product->category->name}`) }}'  --}}
-                                                    src="{{ asset($product->image ? "/storage/$product->image" : 'https://source.unsplash.com/random/?' . $product->id) }}"
-
+                                                    src='{{ asset($product->image ? "/storage/$product->image" : "https://picsum.photos/1000/680?random=" . $product->id) }}' 
+                                                    {{-- src="{{ asset($product->image ? "/storage/$product->image" : 'https://source.unsplash.com/random/?' . $product->id) }}" --}}
                                                     alt="" 
-                                                    style="object-fit:contain" 
+                                                    style="object-fit:cover" 
                                                     width="50" 
                                                     height="50"
                                                 >
                                             </a>
-                                            {{-- <img src="/storage/{{$product->image}}" alt="" style="object-fit:contain"> --}}
                                         </td>
                                         <td>{{$product->price}}</td>
-                                        <td style="width: px;">{{\Illuminate\Support\Str::limit($product->description, 15)}}</td>                                    <td>{{$product->category->name}}</td>
-                                        <td>{{$product->users->count()}}</td>
+                                        <td style="width: px;">{{\Illuminate\Support\Str::limit($product->description, 15)}}</td>                                    
+                                        <td>{{$product->category->name}}</td>
+                                        <td>{{$product->users_count}}</td>
                                         <td class="d-flex gap-2">
-                                            <a href="/admin/products/{{$product->id}}/edit" class="btn btn-primary text-white">Edit</a>
-                                            <form action="/admin/products/{{$product->id}}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger bg-danger text-white">Delete</button>
+                                            <a href="{{ route('products.edit', $product->id)}}" class="btn btn-primary text-white">Edit</a>
+                                            <form 
+                                                action=" {{ route('products.destroy', $product->id) }}" 
+                                                method="post" 
+                                                onsubmit="return confirm('Are you sure you want to delete?');"
+                                            >
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger bg-danger text-white">Delete</button>
                                             </form>
                                             
                                         </td>
                                     </tr>
 
-                                    {{-- example --}}
-                                    @foreach ($products->reverse() as $index => $product)
+                                    {{-- See Picture --}}
+                                    @foreach ($products as $index => $product)
                                         <div class="modal fade" id="productModal{{ $product->id }}" tabindex="-1" aria-labelledby="productModalLabel{{ $product->id }}" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
@@ -98,8 +101,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <img 
-                                                            src="{{ asset($product->image ? "/storage/$product->image" : 'https://source.unsplash.com/random/?' . $product->id) }}"
-                                                            {{-- src="/storage/{{ $product->image }}"  --}}
+                                                            src='{{ asset($product->image ? "/storage/$product->image" : "https://picsum.photos/1000/680?random=" . $product->id) }}' 
                                                             class="img-fluid" 
                                                             alt="{{ $product->title }}"
                                                         >
@@ -120,6 +122,7 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        {{$products->links()}}
                         </div>
                     </div>
                 </div>
