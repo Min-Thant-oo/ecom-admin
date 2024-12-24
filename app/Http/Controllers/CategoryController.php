@@ -46,7 +46,7 @@ class CategoryController extends Controller
         return to_route('categories.index')->with('success', 'Category Updated Successfully');
     }
 
-    public function destory(Category $category)
+    public function destroy(Category $category)
     {
         $category->delete();
 
