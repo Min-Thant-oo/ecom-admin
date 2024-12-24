@@ -35,7 +35,7 @@
                             
                             <img 
                                 {{-- src="/storage/{{$product->image}}"  --}}
-                                src="{{ asset($product->image ? "/storage/$product->image" : 'https://source.unsplash.com/random/?' . $product->id) }}"
+                                src="{{ asset($product->image ? "/storage/$product->image" : 'https://picsum.photos/520/450?random=' . $product->id) }}"
                                 width="200px" 
                                 height="100px" 
                                 alt="" 

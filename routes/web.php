@@ -20,7 +20,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['admin'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home.index');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/info/edit', [AdminController::class, 'edit'])->name('info.edit');
+    Route::get('/info', [AdminController::class, 'edit'])->name('info.edit');
     Route::patch('/info/update', [AdminController::class, 'update'])->name('info.update');
     Route::post('/logout', [AuthController::class, 'logout']);
 

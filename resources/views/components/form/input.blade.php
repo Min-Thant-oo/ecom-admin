@@ -11,7 +11,9 @@
         name="{{$name}}" 
         {{-- first parameter of old function is for when the validation fails 
              second parameter is for edit page --}}
-        value="{{old($name, $value)}}" 
+
+        {{-- !! !! -> makes html not to escape the output --}}
+        value="{!! old($name, $value) !!}" 
         class="form-control rounded-md {{$class}}" 
         id="{{$name}}" 
         placeholder="Please Enter {{ucwords($name)}}"
